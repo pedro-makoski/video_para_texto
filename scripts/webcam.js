@@ -52,7 +52,10 @@ function to_txt(dados, pixelsize) {
             }
             
             let media = (r+g+b)/3
-            let index = 27 - Math.floor((media/255)*len) - 1
+            let index = len - Math.floor((media/255)*len) - 1
+            if(index < 0) {
+                index = 0
+            }
             
             res += `<span style="color:rgba(${r}, ${g}, ${b}, 1);">${densidade[index]}</span>`
         }
