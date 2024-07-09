@@ -16,13 +16,15 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 }
 
 function to_txt(dados, pixelsize) {
-    const {width, height, data} = dados
     let res = ''
+    const {width, height, data} = dados
     const densidade = 'Ñ@#W$9876543210?abc;:+=-,._'
     let len = densidade.length
-
+    
     for(let linha_pos = 1; linha_pos <= height; linha_pos+=pixelsize) {
+        let cont = 0;
         for(let colum_pos = 1; colum_pos <= width; colum_pos+=pixelsize) {
+            cont++
             let i = (width*(linha_pos-1) + colum_pos) * 4
 
             let [r, g, b, count] = [data[i], data[i+1], data[i+2], 0];
@@ -46,15 +48,18 @@ function to_txt(dados, pixelsize) {
                 r = r/count
                 g = g/count
                 b = b/count
+
             }
-
+            
             let media = (r+g+b)/3
-            let index = 27 - Math.floor((media/255)*len)
-
+            let index = 27 - Math.floor((media/255)*len) - 1
+            
             res += `<span style="color:rgba(${r}, ${g}, ${b}, 1);">${densidade[index]}</span>`
         }
 
         res += '<br>'
+        console.log(cont)
+        cont = 0
     }
 
     return res
