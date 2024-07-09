@@ -9,44 +9,57 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             capturar()
         })
         .catch((error) => {
-            alert('Sua webcam não é compatível')
+            alert('Você precisa aceitar para funcionar')
         })
 } else {
     alert('Ops seu navegador não é compatível')
 }
 
-function reorganizando_imagem(dados) {
+function to_txt(dados, pixelsize) {
     const {width, height, data} = dados
-    const res = []
-    let linha = []
-    let linha_idx = 0
+    let res = ''
+    const densidade = 'Ñ@#W$9876543210?abc;:+=-,._'
+    let len = densidade.length
 
-    for(let pixel = 0; pixel < data.length; pixel += 4) {
-        linha.push([data[pixel], data[pixel+1], data[pixel+2], 1])
-        linha_idx += 1
+    for(let linha_pos = 1; linha_pos <= height; linha_pos+=pixelsize) {
+        for(let colum_pos = 1; colum_pos <= width; colum_pos+=pixelsize) {
+            let i = (width*(linha_pos-1) + colum_pos) * 4
 
-        if(linha_idx === width) {
-            res.push(linha)
-            linha_idx = 0
-            linha = []
+            let [r, g, b, count] = [data[i], data[i+1], data[i+2], 0];
+            
+            if(pixelsize !== 1) {
+                [r, g, b] = [0, 0, 0]
+
+                for(let posY = linha_pos; posY < linha_pos+pixelsize && posY < height; posY++) {
+                    for(let posX = colum_pos; posX < colum_pos+pixelsize && posX < width; posX++) {
+                        i = (width*(posY-1) + posX) * 4     
+                        
+                        r += data[i]
+                        g += data[i+1]
+                        b += data[i+2]
+    
+                        count++
+                    }
+                }
+    
+                
+                r = r/count
+                g = g/count
+                b = b/count
+            }
+
+            let media = (r+g+b)/3
+            let index = Math.floor((media/255)*len)
+
+            res += `<span style="color:rgba(${r}, ${g}, ${b}, 1);">${densidade[index]}</span>`
         }
+
+        res += '<br>'
     }
 
     return res
 }
 
-function to_txt(data) {
-    let texto = ''
-    for(let linha = 0; linha < data.length; linha++) {
-        let texto_linha = ''
-        for(pixel = 0; pixel < data[linha].length; pixel++) {
-            texto_linha += `<span style="color:rgba(${data[linha][pixel][0]}, ${data[linha][pixel][1]}, ${data[linha][pixel][2]}, ${data[linha][pixel][3]})">A</span>`
-        }
-        texto += texto_linha + '<br>'
-    }
-
-    return texto
-}
 
 function capturar() {
     function capturarFrame() {
@@ -56,18 +69,17 @@ function capturar() {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
     
-            context.drawImage(video, 0, 0, canvas.width*0.1, canvas.height*0.1)
+            context.drawImage(video, 0, 0, canvas.width, canvas.height)
 
             
-            const imageData = context.getImageData(0, 0, canvas.width*0.1, canvas.height*0.1)
-            const pixels = reorganizando_imagem(imageData)
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
-            texto.innerHTML = to_txt(pixels)
-        }, 1000)
+            texto.innerHTML = to_txt(imageData, 7)
+        }, 100)
 
         setTimeout(() => {
             requestAnimationFrame(capturarFrame)
-        }, 1000)
+        }, 100)
     }
 
     video.addEventListener('loadeddata', () => {

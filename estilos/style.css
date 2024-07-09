@@ -12,7 +12,7 @@ body {
 }
 
 h1 {
-    padding: 20px;
+    padding: 6px;
     text-align: center;
     font-size: 2.5em;
     color: white;
@@ -25,29 +25,32 @@ main {
 
 main > section {
     display: flex;
+    flex-wrap: wrap;
     height: fit-content;
-    width: 90%;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
     margin: auto;
     max-height: 500px;
+    gap: 20px;
 }
 
 video {
     display: block;
-    background-color: white;
+    background-color: black;
     border-radius: 50px;
     border: 5px solid black;
-    margin-left: 50px;  
 }
 
 .texto {
+    font-family:'Courier New', Courier, monospace;
     display: block;
-    background-color: white;
+    background-color: black;
     border-radius: 50px;
     border: 5px solid black;
-    margin-left: 20px;
-    width: 100%;
     font-size: 0.5em;
-    padding: 20px;
+    padding: 10px;
+    height: fit-content;
 }
 
 canvas#texto_video {
