@@ -72,6 +72,8 @@ function to_txt(dados, pixelsize) {
 function capturar() {
     function capturarFrame() {
         setTimeout(() => {
+            const QUANTIDADE_DE_VEZES_A_DIMINUIR_PIXELS = 7
+
             const context = canvas.getContext('2d')
     
             canvas.width = video.videoWidth;
@@ -82,7 +84,7 @@ function capturar() {
             
             const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
 
-            texto.innerHTML = to_txt(imageData, 7)
+            texto.innerHTML = to_txt(imageData, QUANTIDADE_DE_VEZES_A_DIMINUIR_PIXELS)
         }, 100)
 
         setTimeout(() => {
