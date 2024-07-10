@@ -21,9 +21,9 @@ function to_txt(dados, pixelsize) {
     const densidade = 'Ñ@#W$9876543210?abc;:+=-,._'
     let len = densidade.length
     
-    for(let linha_pos = 1; linha_pos <= height; linha_pos+=pixelsize) {
+    for(let linha_pos = 0; linha_pos < height; linha_pos+=pixelsize) {
         let cont = 0;
-        for(let colum_pos = 1; colum_pos <= width; colum_pos+=pixelsize) {
+        for(let colum_pos = 0; colum_pos < width; colum_pos+=pixelsize) {
             cont++
             let i = (width*(linha_pos-1) + colum_pos) * 4
 
@@ -34,11 +34,11 @@ function to_txt(dados, pixelsize) {
 
                 for(let posY = linha_pos; posY < linha_pos+pixelsize && posY < height; posY++) {
                     for(let posX = colum_pos; posX < colum_pos+pixelsize && posX < width; posX++) {
-                        i = (width*(posY-1) + posX) * 4     
+                        i = ((width*(posY) + (posX)) * 4)   
                         
                         r += data[i]
                         g += data[i+1]
-                        b += data[i+2]
+                        b += data[i+2]      
     
                         count++
                     }
@@ -48,11 +48,11 @@ function to_txt(dados, pixelsize) {
                 r = r/count
                 g = g/count
                 b = b/count
-
             }
             
             let media = (r+g+b)/3
             let index = len - Math.floor((media/255)*len) - 1
+
             if(index < 0) {
                 index = 0
             }
@@ -61,7 +61,6 @@ function to_txt(dados, pixelsize) {
         }
 
         res += '<br>'
-        console.log(cont)
         cont = 0
     }
 
